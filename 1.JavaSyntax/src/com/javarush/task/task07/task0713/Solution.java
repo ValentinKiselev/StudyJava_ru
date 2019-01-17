@@ -20,7 +20,7 @@ public class Solution {
         for (int r = 0; r < 20; r++) {
             int1.add(Integer.parseInt(reader.readLine()));
         }
-
+//comment2
         for (int j = 0; j < int1.size(); j++) {
             Integer a = int1.get(j);
             int test = 0;
