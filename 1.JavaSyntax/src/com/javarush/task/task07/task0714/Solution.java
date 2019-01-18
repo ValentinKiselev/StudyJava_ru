@@ -21,6 +21,7 @@ public class Solution {
         System.out.println(strings.get(2));
         System.out.println(strings.get(1));
         System.out.println(strings.get(0));
+        //cicle?
     }
 }
 
