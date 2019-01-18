@@ -27,9 +27,9 @@ public class Solution {
                 list.add(i, list.get(i));
                 i++;
             }
-            else if (list.get(i).contains("р")){
-                list.remove(i);
-                i--;}
+                else if (list.get(i).contains("р")){
+                    list.remove(i);
+                    i--;}
             }
         return list;
     }
