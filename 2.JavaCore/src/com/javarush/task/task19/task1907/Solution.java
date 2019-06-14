@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class Solution {
     public static void main(String[] args) throws IOException {
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         String fileName;
@@ -24,6 +25,7 @@ public class Solution {
         char[] buf = new char[fileName.length()];
 
         while (fileReader.ready()) {
+
             int useless = fileReader.read(buf);
             StringBuilder builder = new StringBuilder();
             builder.append(buf);
@@ -40,7 +42,6 @@ public class Solution {
                 if (matcher.matches()) resultAll++;
 
             }
-
         }
         System.out.println(resultAll);
         reader.close();
