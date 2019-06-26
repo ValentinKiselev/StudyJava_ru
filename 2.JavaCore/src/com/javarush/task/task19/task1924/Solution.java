@@ -38,38 +38,53 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(System.in));
         BufferedReader reader = new BufferedReader(new FileReader(bufferedReader.readLine()));
+
         List<String> list = new ArrayList<>();
-        list = reader.lines().collect(Collectors.toList());
+        list = reader.lines().collect(Collectors.toList());// lines() - returns a stream,
+        // .collect(Collectors.toList()) - stream to collection List
         bufferedReader.close();
         reader.close();
-        Pattern p = Pattern.compile("\\d+");
+
+        Pattern p = Pattern.compile("\\d+");//\d+ "-" 0-9 more then 1 time
 
         Matcher matcher;
 
         for (int i=0;i<list.size();i++){
+
             String [] strings = list.get(i).split("\\s");
+
             for (int j=0;j<strings.length;j++){
 
                 matcher = p.matcher(strings[j]);
+
                 while (matcher.find()){
+
                     if (matcher.matches()){
+
                         for  ( Map.Entry<Integer,String> m : map.entrySet()){
+
                             if (Integer.parseInt(strings[j])==m.getKey()){
                                 strings[j]= m.getValue();
                                 break;
                             }
+
                         }
                     }
                 }
             }
             String lines = "";
+
             for (int z= 0;z<strings.length;z++){
                 lines+=strings[z]+" ";
             }
+
             list.set(i,lines);
+
         }
+
         for (int i=0;i<list.size();i++){
             System.out.println(list.get(i));
         }
+
     }
 }
