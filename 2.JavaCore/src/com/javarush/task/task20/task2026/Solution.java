@@ -62,7 +62,6 @@ public class Solution {
                         }
                     }
                     if (flag) {
-
                         for (int p = i; p <= yEnd; p++) {
                             for (int q = j; q <= xEnd; q++) {
                                 a[p][q] = 0;
