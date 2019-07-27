@@ -26,7 +26,7 @@ public class Solution {
         }
         Files.walkFileTree(path, new MyFileVisitor());
         System.out.println("Всего папок - " + (DirList.size()-1));
-        System.out.println("Всего файлов - " + (FilesList.size()));
+        System.out.println("Всего файлов - " + (FilesList.size()1));
         System.out.println("Общий размер - " + size);
 
     }
