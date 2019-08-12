@@ -5,7 +5,7 @@ import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 
-/*
+/* 
 Построй дерево(1)
 */
 public class CustomTree extends AbstractList<String> implements Cloneable, Serializable {
@@ -50,7 +50,7 @@ public class CustomTree extends AbstractList<String> implements Cloneable, Seria
         return 0;
     }
 
-    class Entry<T> implements Serializable {
+    static class Entry<T> implements Serializable {
 
         String elementName;
         boolean availableToAddLeftChildren;
@@ -64,8 +64,9 @@ public class CustomTree extends AbstractList<String> implements Cloneable, Seria
             this.availableToAddLeftChildren = true;
             this.availableToAddRightChildren = true;
         }
-        public boolean isAvailableToAddChildren (boolean availableToAddLeftChildren, boolean availableToAddRightChildren){
-            return this.availableToAddRightChildren || this.availableToAddLeftChildren;
+        public boolean isAvailableToAddChildren() {
+            if (this.availableToAddLeftChildren || this.availableToAddRightChildren) return true;
+            else return false;
         }
     }
 
