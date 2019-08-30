@@ -16,7 +16,6 @@ public class Solution {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Random random = new Random();
 
-        // digits
         for (int i = 0; i < 8; i++) {
             if(i < 3) byteArrayOutputStream.write(48 + random.nextInt(10));
             else if(i >= 3 && i < 6) byteArrayOutputStream.write(65 + random.nextInt(26));
