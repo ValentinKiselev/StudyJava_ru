@@ -12,7 +12,6 @@ public class Space {
     private List<Bomb> bombs = new ArrayList<Bomb>();
     public static Space game;
 
-
     public Space(int width, int height) {
         this.width = width;
         this.height = height;
