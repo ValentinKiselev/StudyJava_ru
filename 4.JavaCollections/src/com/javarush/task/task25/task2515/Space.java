@@ -10,6 +10,7 @@ public class Space {
     private List<Ufo> ufos = new ArrayList<Ufo>();
     private List<Rocket> rockets = new ArrayList<Rocket>();
     private List<Bomb> bombs = new ArrayList<Bomb>();
+    public static Space game;
 
 
     public Space(int width, int height) {
