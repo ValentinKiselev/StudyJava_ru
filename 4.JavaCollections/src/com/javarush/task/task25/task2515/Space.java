@@ -104,8 +104,15 @@ public class Space {
      * Создаем новый НЛО. 1 раз на 10 вызовов.
      */
     public void createUfo() {
+        if(ufos.size() > 0) return;
         //тут нужно создать новый НЛО.
         //1 раз за 10 вызовов метода.
+        int random10 = (int) (Math.random() * 10);
+        if (random10 == 0) {
+            double x = Math.random() * 20;
+            double y = Math.random() * 10;
+            ufos.add(new Ufo(x, y));
+        }
     }
 
     /**
@@ -114,7 +121,16 @@ public class Space {
      * б) падение ниже края игрового поля (бомба умирает)
      */
     public void checkBombs() {
-        //тут нужно проверить все возможные столкновения для каждой бомбы.
+        for (Bomb bomb : bombs) {
+            if (ship.isIntersect(bomb)) {
+                ship.die();
+                bomb.die();
+            }
+
+            if (bomb.getY() >= height) {
+                bomb.die();
+            }
+        }
     }
 
     /**
@@ -123,6 +139,18 @@ public class Space {
      * б) вылет выше края игрового поля (ракета умирает)
      */
     public void checkRockets() {
+        for (Rocket rocket : rockets) {
+            for (Ufo ufo : ufos) {
+                if (ufo.isIntersect(rocket)) {
+                    ufo.die();
+                    rocket.die();
+                }
+            }
+
+            if (rocket.getY() <= 0) {
+                rocket.die();
+            }
+        }
         //тут нужно проверить все возможные столкновения для каждой ракеты.
     }
 
@@ -130,8 +158,20 @@ public class Space {
      * Удаляем умершие объекты (бомбы, ракеты, НЛО) из списков
      */
     public void removeDead() {
-        //тут нужно удалить все умершие объекты из списков.
-        //Кроме космического корабля - по нему определяем идет еще игра или нет.
+        for (BaseObject object : new ArrayList<BaseObject>(bombs)) {
+            if (!object.isAlive())
+                bombs.remove(object);
+        }
+
+        for (BaseObject object : new ArrayList<BaseObject>(rockets)) {
+            if (!object.isAlive())
+                rockets.remove(object);
+        }
+
+        for (BaseObject object : new ArrayList<BaseObject>(ufos)) {
+            if (!object.isAlive())
+                ufos.remove(object);
+        }
     }
 
     /**
