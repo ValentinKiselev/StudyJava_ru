@@ -12,9 +12,11 @@ public class OurHashMapStorageStrategy implements StorageStrategy {
     public int hash(Long k){
         return k.hashCode();
     }
+
     public int indexFor(int hash, int length){
         return hash & (length-1);
     }
+
     public Entry getEntry(Long key){
         if (size == 0) {
             return null;
