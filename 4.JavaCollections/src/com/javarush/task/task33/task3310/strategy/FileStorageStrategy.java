@@ -30,7 +30,6 @@ public class FileStorageStrategy implements StorageStrategy {
     private Entry getEntry(Long key) {
         int hash = hash(key);
         int index = indexFor(hash, table.length);
-
         if (table[index] != null) {
             Entry entry = table[index].getEntry();
             while (entry != null) {
