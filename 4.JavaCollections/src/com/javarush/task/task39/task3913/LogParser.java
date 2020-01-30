@@ -1,5 +1,6 @@
 package com.javarush.task.task39.task3913;
 
+import com.javarush.task.task39.task3913.query.DateQuery;
 import com.javarush.task.task39.task3913.query.IPQuery;
 import com.javarush.task.task39.task3913.query.UserQuery;
 
@@ -14,7 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class LogParser implements IPQuery, UserQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery {
 
     private Path logDir;
     private List<String> linesList;
@@ -282,5 +283,110 @@ public class LogParser implements IPQuery, UserQuery {
             }
         }
         return LoggedUsers;
+    }
+
+    @Override
+    public Set<Date> getDatesForUserAndEvent(String user, Event event, Date after, Date before) {
+        Set<Date> set = new HashSet<>();
+        for (String line : linesList)
+        {String[] parts = line.split("\\t");
+            if(user.equals(parts[1]) && event.toString().equals(parts[3].split(" ")[0])) addDateEntity(after, before, parts, set);
+        }
+        return set;
+    }
+
+    private void addDateEntity(Date after, Date before, String[] parts, Set<Date> set) {
+        Date date = getDate(parts[2]);
+        long time = getDate(parts[2]).getTime();
+        if (isCompatibleDate(time, after, before)) set.add(date);
+        }
+
+    @Override
+    public Set<Date> getDatesWhenSomethingFailed(Date after, Date before) {
+        Set<Date> set = new HashSet<>();
+        for (String line : linesList)
+        {String[] parts = line.split("\\t");
+            if(Status.FAILED.toString().equals(parts[4])) addDateEntity(after, before, parts, set);
+        }
+        return set;
+    }
+
+    @Override
+    public Set<Date> getDatesWhenErrorHappened(Date after, Date before) {
+        Set<Date> set = new HashSet<>();
+        for (String line : linesList)
+        {String[] parts = line.split("\\t");
+            if(Status.ERROR.toString().equals(parts[4])) addDateEntity(after, before, parts, set);
+        }
+        return set;
+    }
+
+    @Override
+    public Date getDateWhenUserLoggedFirstTime(String user, Date after, Date before) {
+        Set<Date> set = new TreeSet<>(dateUniversal(after, before, 2, user, Event.LOGIN.toString(), Status.OK.toString()));
+        if (set.size() == 0)
+            return null;
+        return set.iterator().next();
+    }
+
+    private Set<Date> dateUniversal(Date after, Date before, int position, String... strings) {
+        Set<String> stringDates = userUniversal(after, before, position, strings);
+        Set<Date> result = new HashSet<>();
+        for (String string : stringDates)
+            result.add(getDate(string));
+        return result;
+    }
+    private Set<String> userUniversal(Date after, Date before, int position, String... strings) {
+        Set<String> result = new HashSet<>();
+        for (String line : linesList) {
+            if (contains(line, strings)) {
+                String[] parts = line.split("\t");
+                addStringEntity(after, before, result, parts, position);
+            }
+        }
+        return result;
+    }
+    private boolean contains(String string, String... strings) {
+        for (String reg : strings) {
+            if (!string.contains(reg))
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Date getDateWhenUserSolvedTask(String user, int task, Date after, Date before) {
+        Set<Date> set = new TreeSet<>(dateUniversal(after, before, 2, user, Event.SOLVE_TASK.toString() + " " + task));
+        if (set.size() == 0)
+            return null;
+        return set.iterator().next();
+    }
+
+    @Override
+    public Date getDateWhenUserDoneTask(String user, int task, Date after, Date before) {
+        Set<Date> set = new TreeSet<>(dateUniversal(after, before, 2, user, Event.DONE_TASK.toString() + " " + task));
+        if (set.size() == 0)
+            return null;
+        return set.iterator().next();
+    }
+
+    @Override
+    public Set<Date> getDatesWhenUserWroteMessage(String user, Date after, Date before) {
+        Set<Date> set = new HashSet<>();
+        for (String line : linesList)
+        {String[] parts = line.split("\\t");
+            if(user.equals(parts[1]) && Event.WRITE_MESSAGE.toString().equals(parts[3])) addDateEntity(after, before, parts, set);
+        }
+        return set;
+    }
+
+    @Override
+    public Set<Date> getDatesWhenUserDownloadedPlugin(String user, Date after, Date before) {
+        Set<Date> set = new HashSet<>();
+        for (String line : linesList)
+        {String[] parts = line.split("\\t");
+            if(user.equals(parts[1]) && Event.DOWNLOAD_PLUGIN.toString().equals(parts[3])                                       ) addDateEntity(after, before, parts, set);
+        }
+        return set;
     }
 }
