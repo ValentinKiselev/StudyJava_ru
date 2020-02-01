@@ -1,9 +1,6 @@
 package com.javarush.task.task39.task3913;
 
-import com.javarush.task.task39.task3913.query.DateQuery;
-import com.javarush.task.task39.task3913.query.EventQuery;
-import com.javarush.task.task39.task3913.query.IPQuery;
-import com.javarush.task.task39.task3913.query.UserQuery;
+import com.javarush.task.task39.task3913.query.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQuery {
 
     private Path logDir;
     private List<String> linesList;
@@ -539,5 +536,53 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
             }
         }
         return map;
+    }
+
+    @Override
+    public Set<Object> execute(String query) {
+        Set<Object> uniqueelements = new HashSet<>();
+        Set<Date> uniquedate = new HashSet<>();
+        Set<Date> uniquestatus = new HashSet<>();
+        switch (query){
+            case("get ip"):
+                    for (String line : linesList) {
+                    String[] parts = line.split("\\t");
+                        uniqueelements.add(parts[0]);
+                    }
+                break;
+            case("get user"):
+                for (String line : linesList) {
+                    String[] parts = line.split("\\t");
+                    uniqueelements.add(parts[1]);
+                }
+                break;
+            case("get date"):
+                for (String line : linesList) {
+                    String[] parts = line.split("\\t");
+                    uniquedate.add(getDate(parts[2]));
+                }
+                break;
+            case("get event"):
+                for (String line : linesList) {
+                    String[] parts = line.split("\\t");
+                    uniqueelements.add(Event.valueOf(parts[3].split(" ")[0]));
+                }
+                break;
+            case("get status"):
+                for (String line : linesList) {
+                    String[] parts = line.split("\\t");
+                    uniqueelements.add(Status.valueOf(parts[4]));
+                }
+                break;
+            default:
+                break;
+
+        }
+
+        if(query.equals("get date")) {
+            uniqueelements.clear();
+            uniqueelements.addAll(uniquedate);
+        }
+        return uniqueelements;
     }
 }
