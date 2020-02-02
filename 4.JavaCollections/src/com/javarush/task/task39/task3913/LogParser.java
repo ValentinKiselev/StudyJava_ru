@@ -540,49 +540,184 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
 
     @Override
     public Set<Object> execute(String query) {
+        if (query == null || query.isEmpty()) return null;
         Set<Object> uniqueelements = new HashSet<>();
-        Set<Date> uniquedate = new HashSet<>();
-        Set<Date> uniquestatus = new HashSet<>();
-        switch (query){
-            case("get ip"):
-                    for (String line : linesList) {
+//        Set<Date> uniquedate = new HashSet<>();
+        String query1 = null;
+//        String query2 = null;
+        String query2pure = null;
+
+        if (query.length() > 9) {
+            query1 = query.split("=")[0].trim();
+//            query2 = query.split("=")[1].trim();
+            query2pure = query.split("=")[1].trim().replace("\"", "");
+        } else if (query.length() <= 9) {
+        }
+
+//        if(query.length() <= 9){
+        switch (query) {
+            case ("get ip"):
+                for (String line : linesList) {
                     String[] parts = line.split("\\t");
-                        uniqueelements.add(parts[0]);
-                    }
+                    uniqueelements.add(parts[0]);
+                }
                 break;
-            case("get user"):
+            case ("get user"):
                 for (String line : linesList) {
                     String[] parts = line.split("\\t");
                     uniqueelements.add(parts[1]);
                 }
                 break;
-            case("get date"):
+            case ("get date"):
                 for (String line : linesList) {
                     String[] parts = line.split("\\t");
-                    uniquedate.add(getDate(parts[2]));
+                    uniqueelements.add(getDate(parts[2]));//uniquedate
                 }
                 break;
-            case("get event"):
+            case ("get event"):
                 for (String line : linesList) {
                     String[] parts = line.split("\\t");
                     uniqueelements.add(Event.valueOf(parts[3].split(" ")[0]));
                 }
                 break;
-            case("get status"):
+            case ("get status"):
                 for (String line : linesList) {
                     String[] parts = line.split("\\t");
                     uniqueelements.add(Status.valueOf(parts[4]));
                 }
                 break;
+
             default:
                 break;
-
         }
+//    }
+        //if(query.length() > 9){
+            switch (query1) {
+                case("get ip for user"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[1].equals(query2pure)) uniqueelements.add(parts[0]);
+                    }
+                    break;
+                case("get ip for date"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[2].equals(query2pure)) uniqueelements.add(parts[0]);
+                    }
+                    break;
+                case("get ip for event"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[3].split(" ")[0].equals(query2pure)) uniqueelements.add(parts[0]);
+                    }
+                    break;
+                case("get ip for status"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[4].equals(query2pure)) uniqueelements.add(parts[0]);
+                    }
+                    break;
+                case("get user for ip"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[0].equals(query2pure)) uniqueelements.add(parts[1]);
+                    }
+                    break;
+                case("get user for date"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[2].equals(query2pure)) uniqueelements.add(parts[1]);
+                    }
+                    break;
+                case("get user for event"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[3].split(" ")[0].equals(query2pure)) uniqueelements.add(parts[1]);
+                    }
+                    break;
+                case("get user for status"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[4].equals(query2pure)) uniqueelements.add(parts[1]);
+                    }
+                    break;
+                case("get date for ip"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[0].equals(query2pure)) uniqueelements.add(getDate(parts[2]));
+                    }
+                    break;
+                case("get date for user"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[1].equals(query2pure)) uniqueelements.add(getDate(parts[2]));
+                    }
+                    break;
+                case("get date for event"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[3].split(" ")[0].equals(query2pure)) uniqueelements.add(getDate(parts[2]));
+                    }
+                    break;
+                case("get date for status"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[4].equals(query2pure)) uniqueelements.add(getDate(parts[2]));
+                    }
+                    break;
+                case("get event for ip"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[0].equals(query2pure)) uniqueelements.add(Event.valueOf(parts[3].split(" ")[0]));
+                    }
+                    break;
+                case("get event for user"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[1].equals(query2pure)) uniqueelements.add(Event.valueOf(parts[3].split(" ")[0]));
+                    }
+                    break;
+                case("get event for date"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[2].equals(query2pure)) uniqueelements.add(Event.valueOf(parts[3].split(" ")[0]));
+                    }
+                    break;
+                case("get event for status"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[4].equals(query2pure)) uniqueelements.add(Event.valueOf(parts[3].split(" ")[0]));
+                    }
+                    break;
+                case("get status for ip"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[0].equals(query2pure)) uniqueelements.add(Status.valueOf(parts[4]));
+                    }
+                    break;
+                case("get status for user"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[1].equals(query2pure)) uniqueelements.add(Status.valueOf(parts[4]));
+                    }
+                    break;
+                case("get status for date"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[2].equals(query2pure)) uniqueelements.add(Status.valueOf(parts[4]));
+                    }
+                    break;
+                case("get status for event"):
+                    for (String line : linesList) {
+                        String[] parts = line.split("\\t");
+                        if(parts[3].split(" ")[0].equals(query2pure)) uniqueelements.add(Status.valueOf(parts[4]));
+                    }
+                    break;
+                default:
+                    break;
+            }
+            //}
 
-        if(query.equals("get date")) {
-            uniqueelements.clear();
-            uniqueelements.addAll(uniquedate);
-        }
         return uniqueelements;
     }
 }
