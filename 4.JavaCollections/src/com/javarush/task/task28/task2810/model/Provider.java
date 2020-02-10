@@ -7,6 +7,10 @@ public class Provider {
         this.strategy = strategy;
     }
 
+    public Provider() {
+        this.strategy = strategy;
+    }
+
     public Strategy getStrategy() {
         return strategy;
     }
