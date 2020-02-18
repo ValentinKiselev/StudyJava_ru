@@ -10,5 +10,6 @@ public class Aggregator {
         Provider provider = new Provider();
         Controller controller = new Controller(provider);
         controller.scan();
+        startegy.getVacancies("Kiev");
     }
 }
