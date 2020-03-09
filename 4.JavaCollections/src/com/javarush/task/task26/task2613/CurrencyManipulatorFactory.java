@@ -18,7 +18,7 @@ public class CurrencyManipulatorFactory {
         return currencyManipulator;
     }
 
-    private CurrencyManipulatorFactory() {
+    public CurrencyManipulatorFactory(String curency) {
 
     }
 }

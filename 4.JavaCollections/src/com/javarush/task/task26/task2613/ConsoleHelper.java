@@ -9,16 +9,58 @@ import java.io.InputStreamReader;
 public class ConsoleHelper {
     private static BufferedReader bis = new BufferedReader(new InputStreamReader(System.in));
 
+    public static String readString() throws InterruptOperationException {
+        String input = "";
+        try {
+            input = bis.readLine();
+
+        } catch (IOException ioexception) {}
+        return input;
+    }
+
     public static void writeMessage(String message) {
         System.out.println(message);
     }
-    public static String readString() throws InterruptOperationException {
-        String message = "";
-        try {
-            message = bis.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+    public static String askCurrencyCode() throws InterruptOperationException {
+        writeMessage("Please choice currency code:");
+        String code = null;
+        while (true) {
+            code = readString();
+            if (code.length() == 3)
+                break;
+            else
+                writeMessage("Error, please choice again:");
+
         }
-        return message;
+        return code.toUpperCase();
     }
+
+    public static String[] getValidTwoDigits(String currencyCode) throws InterruptOperationException {
+
+        writeMessage("Input nominal and amount:");
+        String[] input;
+
+        while (true) {
+            input = readString().split(" ");
+            int nominal = 0;
+            int amount = 0;
+
+            try {
+                nominal = Integer.parseInt(input[0]);
+                amount = Integer.parseInt(input[1]);
+            }
+            catch (Exception e) {
+                writeMessage("Error, please repeat:");
+                continue;
+            }
+            if (nominal <= 0 || amount <= 0 || input.length > 2) {
+                writeMessage("Error, please again:");
+                continue;
+            }
+            break;
+        }
+        return input;
+    }
+
 }
