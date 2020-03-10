@@ -12,6 +12,10 @@ public class CurrencyManipulator {
         this.currencyCode = currencyCode;
     }
 
+    public CurrencyManipulator() {
+
+    }
+
     public String getCurrencyCode() {
         return currencyCode;
     }
@@ -22,5 +26,13 @@ public class CurrencyManipulator {
         } else {
             denominations.put(denomination, count);
         }
+    }
+    public int getTotalAmount(){
+        int result = 0;
+
+        for (Map.Entry<Integer, Integer> pair : denominations.entrySet()) {
+            result = result + (pair.getKey() * pair.getValue());
+        }
+        return result;
     }
 }
