@@ -62,5 +62,19 @@ public class ConsoleHelper {
         }
         return input;
     }
+    public static Operation askOperation() throws InterruptOperationException{
+        String numcommands = null;
+        Operation operation = null;
+        while (true){
+            try {
+                int numcommand = Integer.parseInt(readString());
+                operation = Operation.getAllowableOperationByOrdinal(numcommand);
+                return operation;
+            }
+            catch (IllegalArgumentException e){
+                continue;
+            }
+        }
+    }
 
 }
