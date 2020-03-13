@@ -4,16 +4,18 @@ import com.javarush.task.task26.task2613.exception.InterruptOperationException;
 
 import java.util.Locale;
 
+import static com.javarush.task.task26.task2613.command.CommandExecutor.execute;
+
 public class CashMachine {
     public static void main(String[] args) throws InterruptOperationException {
         Locale.setDefault(Locale.ENGLISH);
-        String code = ConsoleHelper.askCurrencyCode();
-        String[] digits = ConsoleHelper.getValidTwoDigits(code);
-        CurrencyManipulator cm = CurrencyManipulatorFactory.getManipulatorByCurrencyCode(code);
-        cm.addAmount(Integer.parseInt(digits[0]), Integer.parseInt(digits[1]));
+        Operation askoperation;
+        do {
+            askoperation = ConsoleHelper.askOperation();
+            execute(askoperation);
+        }
+        while (!Operation.EXIT.equals(askoperation));
 
-        CurrencyManipulator currencyManipulator = CurrencyManipulatorFactory.getManipulatorByCurrencyCode(code);
-        currencyManipulator.addAmount(Integer.parseInt(digits[0]), Integer.parseInt(digits[1]));
-        currencyManipulator.getTotalAmount();
     }
+
 }

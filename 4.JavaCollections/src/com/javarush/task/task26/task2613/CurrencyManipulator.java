@@ -15,7 +15,9 @@ public class CurrencyManipulator {
     public CurrencyManipulator() {
 
     }
-
+    public boolean hasMoney(){
+        return denominations.size()!=0;
+    }
     public String getCurrencyCode() {
         return currencyCode;
     }
