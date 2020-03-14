@@ -13,7 +13,9 @@ public class ConsoleHelper {
         String input = "";
         try {
             input = bis.readLine();
-
+        if(input.equalsIgnoreCase("EXIT")) {
+            throw new InterruptOperationException();
+        }
         } catch (IOException ioexception) {}
         return input;
     }
