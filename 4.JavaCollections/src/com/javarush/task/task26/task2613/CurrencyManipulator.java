@@ -1,7 +1,8 @@
 package com.javarush.task.task26.task2613;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.javarush.task.task26.task2613.exception.NotEnoughMoneyException;
+
+import java.util.*;
 
 public class CurrencyManipulator {
 
@@ -36,5 +37,38 @@ public class CurrencyManipulator {
             result = result + (pair.getKey() * pair.getValue());
         }
         return result;
+    }
+
+    public boolean isAmountAvailable(int expectedAmount){
+        return expectedAmount <= getTotalAmount();
+    }
+
+    public Map<Integer, Integer> withdrawAmount(int expectedAmount) throws NotEnoughMoneyException {
+        if (!hasMoney()) throw new NotEnoughMoneyException();
+        Map<Integer, Integer> map = new HashMap<>();
+        Set<Integer> keys = new TreeSet<>(Comparator.reverseOrder());
+        keys.addAll(denominations.keySet());
+        Map<Integer, Integer> copyDenoninations = new TreeMap<>(Comparator.reverseOrder());
+        copyDenoninations.putAll(denominations);
+
+        int intPart, modPart = expectedAmount, val, save, testsum = 0;
+
+        for (Integer key: keys) {
+            intPart = modPart / key;
+            modPart = modPart % key;
+            if (intPart > 0) {
+                val = copyDenoninations.get(key) - intPart >= 0 ? intPart: copyDenoninations.get(key);
+                save = copyDenoninations.get(key) - intPart >= 0 ? copyDenoninations.get(key) - intPart: 0;
+                if (val < intPart) modPart += (intPart - val) * key;
+                if (save == 0) copyDenoninations.remove(key);
+                else copyDenoninations.put(key, save);
+                map.put(key, val);
+                testsum += (val * key);
+            }
+            if (modPart == 0) break;
+        }
+        if (testsum != expectedAmount) throw new NotEnoughMoneyException();
+        denominations = copyDenoninations;
+        return map;
     }
 }
