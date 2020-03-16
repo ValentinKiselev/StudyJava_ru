@@ -15,36 +15,37 @@ class WithdrawCommand implements Command{
     @Override
     public void execute() throws InterruptOperationException{
         String currencyCode= ConsoleHelper.askCurrencyCode();
-        CurrencyManipulator currencyManipulator = CurrencyManipulatorFactory.getManipulatorByCurrencyCode(currencyCode);
-        int summa =summa(currencyManipulator);
-        Map<Integer,Integer> map = new TreeMap(Collections.reverseOrder());
+        CurrencyManipulator currencyManipulator= CurrencyManipulatorFactory.getManipulatorByCurrencyCode(currencyCode);
+        int summa=summaDeneg(currencyManipulator);
+        Map<Integer,Integer> map= new TreeMap(Collections.reverseOrder());
         try {
             map = currencyManipulator.withdrawAmount(summa);
         } catch (NotEnoughMoneyException e) {
-            ConsoleHelper.writeMessage("Impossible to give out amount");
+            ConsoleHelper.writeMessage("Невозможно выдать запрашиваемую сумму!");
         }
-        for (Map.Entry<Integer,Integer> entry: map.entrySet())
+        for (Map.Entry<Integer,Integer> entry:map.entrySet())
         {
             if (entry.getValue()!=0){ConsoleHelper.writeMessage("\t"+entry.getKey()+" - "+entry.getValue());}
         }
 
     }
-    private int summa(CurrencyManipulator currencyManipulator) throws InterruptOperationException {
+    private int summaDeneg(CurrencyManipulator currencyManipulator) throws InterruptOperationException {
         try {
-            ConsoleHelper.writeMessage("Please, insert sum:");
+            ConsoleHelper.writeMessage("Введите сумму:");
             int summa = Integer.parseInt(ConsoleHelper.readString());
             if (!currencyManipulator.isAmountAvailable(summa))
             {
-                ConsoleHelper.writeMessage("Not enough money.");
-                summa=summa(currencyManipulator);
+                ConsoleHelper.writeMessage("Дорогой, денег не достаточно!!!");
+                summa=summaDeneg(currencyManipulator);
             }
+
+
             return summa;
 
-        }
-        catch (NumberFormatException e)
+        }catch (NumberFormatException e)
         {
-            ConsoleHelper.writeMessage("Don't correct data");
-            return summa(currencyManipulator);
+            ConsoleHelper.writeMessage("Сумма неверная!!!");
+            return summaDeneg(currencyManipulator);
         }
     }
 
