@@ -8,6 +8,7 @@ import java.util.Locale;
 import static com.javarush.task.task26.task2613.command.CommandExecutor.execute;
 
 public class CashMachine {
+
     public static void main(String[] args) {
 
         try {
