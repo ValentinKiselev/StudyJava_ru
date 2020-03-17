@@ -1,53 +1,47 @@
 package com.javarush.task.task26.task2613.command;
 
+import com.javarush.task.task26.task2613.CashMachine;
 import com.javarush.task.task26.task2613.ConsoleHelper;
 import com.javarush.task.task26.task2613.CurrencyManipulator;
 import com.javarush.task.task26.task2613.CurrencyManipulatorFactory;
 import com.javarush.task.task26.task2613.exception.InterruptOperationException;
 import com.javarush.task.task26.task2613.exception.NotEnoughMoneyException;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ResourceBundle;
 
 class WithdrawCommand implements Command{
+    private ResourceBundle res = ResourceBundle.getBundle(CashMachine.class.getPackage().getName() + ".resources.withdraw_en");
 
     @Override
     public void execute() throws InterruptOperationException{
-        String currencyCode= ConsoleHelper.askCurrencyCode();
-        CurrencyManipulator currencyManipulator= CurrencyManipulatorFactory.getManipulatorByCurrencyCode(currencyCode);
-        int summa=summaDeneg(currencyManipulator);
-        Map<Integer,Integer> map= new TreeMap(Collections.reverseOrder());
-        try {
-            map = currencyManipulator.withdrawAmount(summa);
-        } catch (NotEnoughMoneyException e) {
-            ConsoleHelper.writeMessage("Невозможно выдать запрашиваемую сумму!");
-        }
-        for (Map.Entry<Integer,Integer> entry:map.entrySet())
-        {
-            if (entry.getValue()!=0){ConsoleHelper.writeMessage("\t"+entry.getKey()+" - "+entry.getValue());}
-        }
-
-    }
-    private int summaDeneg(CurrencyManipulator currencyManipulator) throws InterruptOperationException {
-        try {
-            ConsoleHelper.writeMessage("Введите сумму:");
-            int summa = Integer.parseInt(ConsoleHelper.readString());
-            if (!currencyManipulator.isAmountAvailable(summa))
-            {
-                ConsoleHelper.writeMessage("Дорогой, денег не достаточно!!!");
-                summa=summaDeneg(currencyManipulator);
+        String curr = ConsoleHelper.askCurrencyCode();
+        CurrencyManipulator currencyManipulator = CurrencyManipulatorFactory.getManipulatorByCurrencyCode(curr);
+        while (true) {
+            ConsoleHelper.writeMessage(res.getString("before"));
+            int amount = 0;
+            String s = ConsoleHelper.readString();
+            try {
+                amount = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                ConsoleHelper.writeMessage(res.getString("specify.amount"));
+                continue;
             }
-
-
-            return summa;
-
-        }catch (NumberFormatException e)
-        {
-            ConsoleHelper.writeMessage("Сумма неверная!!!");
-            return summaDeneg(currencyManipulator);
+            if (amount <= 0) {
+                ConsoleHelper.writeMessage(res.getString("specify.not.empty.amount"));
+                continue;
+            }
+            if (!currencyManipulator.isAmountAvailable(amount)) {
+                ConsoleHelper.writeMessage(res.getString("not.enough.money"));
+                continue;
+            }
+            try {
+                currencyManipulator.withdrawAmount(amount);
+                ConsoleHelper.writeMessage(String.format(res.getString("success.format"), amount, curr));
+            } catch (NotEnoughMoneyException e) {
+                ConsoleHelper.writeMessage(res.getString("exact.amount.not.available"));
+                continue;
+            }
+            break;
         }
     }
-
 }
-
