@@ -17,22 +17,22 @@ public class LoginCommand implements Command {
         while (true)
         {
             ConsoleHelper.writeMessage(res.getString("specify.data"));
-            String string1 = ConsoleHelper.readString();
-            String string2 = ConsoleHelper.readString();
-            if (validCreditCards.containsKey(string1))
+            String s1 = ConsoleHelper.readString();
+            String s2 = ConsoleHelper.readString();
+            if (validCreditCards.containsKey(s1))
             {
-                if (validCreditCards.getString(string1).equals(string2))
-                    ConsoleHelper.writeMessage(String.format(res.getString("success.format"), string1));
+                if (validCreditCards.getString(s1).equals(s2))
+                    ConsoleHelper.writeMessage(String.format(res.getString("success.format"), s1));
                 else
                 {
-                    ConsoleHelper.writeMessage(String.format(res.getString("not.verified.format"), string1));
+                    ConsoleHelper.writeMessage(String.format(res.getString("not.verified.format"), s1));
                     ConsoleHelper.writeMessage(res.getString("try.again.or.exit"));
                     continue;
                 }
             }
             else
             {
-                ConsoleHelper.writeMessage(String.format(res.getString("not.verified.format"), string1));
+                ConsoleHelper.writeMessage(String.format(res.getString("not.verified.format"), s1));
                 ConsoleHelper.writeMessage(res.getString("try.again.with.details"));
                 continue;
             }
