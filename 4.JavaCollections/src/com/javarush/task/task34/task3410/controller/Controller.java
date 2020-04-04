@@ -5,13 +5,15 @@ import com.javarush.task.task34.task3410.view.View;
 
 public class Controller {
     public static void main(String[] args) {
-
+    Controller controller = new Controller();
     }
     View view;
     Model model;
     public Controller() {
         this.view = new View(this);
         this.model = new Model();
+        view.init();
     }
+
 
 }
