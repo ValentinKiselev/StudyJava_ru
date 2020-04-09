@@ -29,7 +29,13 @@ public class View extends JFrame {
     public void update(){
         this.field.repaint();
     }
+
     public GameObjects getGameObjects() {
         return controller.getGameObjects();
+    }
+    public void completed(int level){
+        update();
+        JOptionPane.showMessageDialog(this, String.format("Level %d completed", level));
+        controller.startNextLevel();
     }
 }
