@@ -20,13 +20,10 @@ public class Field extends JPanel {
     }
 
     public void paint(Graphics g) {
-
         g.setColor(Color.BLACK);
-        g.fillRect(0,0, 300, 300);
-
+        g.fillRect(0, 0, 500, 500);
         Set<GameObject> gameObjectSet = view.getGameObjects().getAll();
-
-        for (GameObject gameObject : gameObjectSet) {
+        for(GameObject gameObject : gameObjectSet) {
             gameObject.draw(g);
         }
 
