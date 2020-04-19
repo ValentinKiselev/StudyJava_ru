@@ -29,7 +29,10 @@ public class Hippodrome {
     }
 
     public void print(){
-
+        for(Horse horse: getHorses()){
+            horse.print();
+        }
+        for(int i = 0; i < 10; i++) System.out.println();
     }
 
     public void move(){
