@@ -20,6 +20,18 @@ public class Hippodrome {
         this.horses = horses;
     }
 
+    public void run(){
+
+    }
+
+    public void print(){
+
+    }
+
+    public void move(){
+
+    }
+
     public static void main(String[] args) {
         game = new Hippodrome();
         Horse horse1 = new Horse("Plyashka", 3, 0);
