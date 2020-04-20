@@ -41,7 +41,7 @@ public class Hippodrome {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         game = new Hippodrome();
         Horse horse1 = new Horse("Plyashka", 3, 0);
         Horse horse2 = new Horse("Hryashka", 3, 0);
@@ -49,5 +49,6 @@ public class Hippodrome {
         game.getHorses().add(horse1);
         game.getHorses().add(horse2);
         game.getHorses().add(horse3);
+        game.run();
         }
 }
