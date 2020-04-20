@@ -41,6 +41,22 @@ public class Hippodrome {
         }
     }
 
+    public Horse getWinner(){
+        Horse winner = null;
+        double distance = getHorses().get(0).getDistance();
+        for (int i = 0; i < horses.size(); i++) {
+            if (getHorses().get(i).getDistance() > distance){
+                winner = getHorses().get(i);
+                distance = winner.getDistance();
+            }
+        }
+        return winner;
+    }
+
+    public void printWinner(){
+        System.out.println("Winner is " + getWinner().getName() + "!");
+    }
+
     public static void main(String[] args) throws InterruptedException {
         game = new Hippodrome();
         Horse horse1 = new Horse("Plyashka", 3, 0);
