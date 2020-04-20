@@ -35,7 +35,8 @@ public class Horse {
         this.distance = distance;
     }
     public void print(){
-
+        for (int i = 0; i < (int) getDistance(); i++) System.out.print(".");
+        System.out.println(getName());
     }
 
     public void move(){
