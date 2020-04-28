@@ -10,7 +10,7 @@ StringTokenizer
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.getTokens("level22.lesson13.task01", ".");
+        System.out.println(solution.getTokens("level22.lesson13.task01", "."));
     }
 
     public static String[] getTokens(String query, String delimiter) {
