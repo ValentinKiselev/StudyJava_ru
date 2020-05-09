@@ -57,4 +57,10 @@ public class Snake {
         SnakeSection snakehead = new SnakeSection(x, y);
         sections.add(snakehead);
     }
+    public void checkBorders(SnakeSection head){
+    if(head.getX() >= Room.game.getWidth() || head.getY() >= Room.game.getHeight()) isAlive = false;
+    }
+    public void checkBody(SnakeSection head){
+    if (sections.contains(head)) isAlive = false;
+    }
 }
