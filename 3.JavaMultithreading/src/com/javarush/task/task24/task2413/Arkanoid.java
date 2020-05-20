@@ -1,6 +1,11 @@
 package com.javarush.task.task24.task2413;
 
 public class Arkanoid {
+    public Arkanoid(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
     private  int width;
     private int height;
 
