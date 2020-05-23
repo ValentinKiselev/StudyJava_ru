@@ -23,7 +23,7 @@ public class Canvas {
         return matrix;
     }
 
-    public void setWidth(int width) {` `
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -34,4 +34,23 @@ public class Canvas {
     public void setMatrix(char[][] matrix) {
         this.matrix = matrix;
     }
+    public void setPoint(double x, double y, char c){
+        if(x < 0 || y < 0 || y >= matrix.length || x >= matrix[0].length) return;
+        int rx = (int) Math.round(x);
+        int ry = (int) Math.round(y);
+        matrix[ry][rx] = c;
+    }
+    void drawMatrix(double x, double y, int[][] matrix, char c){
+        int height = matrix.length;
+        int width = matrix[0].length;
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (matrix[i][j] != 0) {
+                    setPoint(x + j, y + i, c);
+                }
+            }
+        }
+    }
+
 }
