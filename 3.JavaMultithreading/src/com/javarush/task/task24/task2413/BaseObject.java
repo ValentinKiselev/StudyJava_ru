@@ -3,9 +3,9 @@ package com.javarush.task.task24.task2413;
 import static java.lang.Double.max;
 
 public abstract class BaseObject {
-    private double x;
-    private double y;
-    private double radius;
+    protected double x;
+    protected double y;
+    protected double radius;
 
     public void setX(double x) {
         this.x = x;
