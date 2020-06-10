@@ -5,6 +5,26 @@ import com.javarush.task.task36.task3608.bean.User;
 import java.util.List;
 
 public class ModelData {
+    public void setActiveUser(User activeUser) {
+        this.activeUser = activeUser;
+    }
+
+    public boolean isDisplayDeletedUserList() {
+        return displayDeletedUserList;
+    }
+
+    public void setDisplayDeletedUserList(boolean displayDeletedUserList) {
+        this.displayDeletedUserList = displayDeletedUserList;
+    }
+
+    private boolean displayDeletedUserList;
+
+    private User activeUser;
+
+    public User getActiveUser() {
+        return activeUser;
+    }
+
     private List<User> users;
 
     public List<User> getUsers() {
