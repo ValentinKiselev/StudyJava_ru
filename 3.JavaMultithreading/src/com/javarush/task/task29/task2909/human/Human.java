@@ -13,7 +13,6 @@ public class Human {
 
     protected int[] size;
 
-    protected boolean isSoldier;
     private List<Human> children = new ArrayList<>();
 
     public static final int FIRST = 1;
@@ -42,11 +41,13 @@ public class Human {
     }
 
     public Human(boolean isSoldier) {
-        this.isSoldier = isSoldier;
         this.id = nextId;
         nextId++;
     }
-
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
     public int getAge() {
         return age;
     }
@@ -65,14 +66,6 @@ public class Human {
 
     public int getCourse() {
         return course;
-    }
-
-    public void live() {
-        if (isSoldier)
-            fight();
-    }
-
-    public void fight() {
     }
 
     public int getId() {
