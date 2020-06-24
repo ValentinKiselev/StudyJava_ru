@@ -18,16 +18,12 @@ public class Student extends UniversityPerson {
         this.age = age;
         this.averageGrade = averageGrade;
     }
-
+    public String getPosition(){return "Студент";}
     public void live() {
         learn();
     }
 
     public void learn() {
-    }
-
-    public void printData() {
-        System.out.println("Студент: " + name);
     }
 
     public void incAverageGradeBy01() {
