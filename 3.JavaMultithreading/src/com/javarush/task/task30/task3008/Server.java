@@ -8,40 +8,58 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
 
-    static private Map<String, Connection> connectionMap = new ConcurrentHashMap<>();;
+    static private Map<String, Connection> connectionMap = new ConcurrentHashMap<>();
+    ;
 
-    private static class Handler extends Thread{
+    private static class Handler extends Thread {
         private Socket socket;
 
         public Handler(Socket socket) {
             super();
             this.socket = socket;
         }
-    }
 
-    public static void main(String[] args) throws Exception{
-        ConsoleHelper.writeMessage("Номер порта:");
-        int portNum = ConsoleHelper.readInt();
-        try(ServerSocket serverSocket = new ServerSocket(portNum)) {
-            ConsoleHelper.writeMessage("Сервер запущен на порту: " + portNum);
-            while (true) {
-                Socket socket = serverSocket.accept();
-                new Handler(socket).start();
+        private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException {
+            String name = null;
+            boolean noconnection = true;
+            while (noconnection) {
+                connection.send(new Message(MessageType.NAME_REQUEST));
+                Message receivemess = connection.receive();
+                if (receivemess.getType() == MessageType.USER_NAME) {
+                    name = receivemess.getData();
+                    if (!name.isEmpty() && connectionMap.get(name) == null) {
+                        connectionMap.put(name, connection);
+                        connection.send(new Message(MessageType.NAME_ACCEPTED));
+                        noconnection = false;
+                    }
+                }
+            }
+            return name;
+        }
+
+        public static void main(String[] args) throws Exception {
+            ConsoleHelper.writeMessage("Номер порта:");
+            int portNum = ConsoleHelper.readInt();
+            try (ServerSocket serverSocket = new ServerSocket(portNum)) {
+                ConsoleHelper.writeMessage("Сервер запущен на порту: " + portNum);
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    new Handler(socket).start();
+                }
+            } catch (Exception e) {
+                ConsoleHelper.writeMessage(e.getMessage());
             }
         }
-        catch (Exception e) {
-            ConsoleHelper.writeMessage(e.getMessage());
-        }
-    }
 
-    public static void sendBroadcastMessage(Message message){
-        for (String clientName : connectionMap.keySet()) {
-            try {
-                connectionMap.get(clientName).send(message);
-            } catch (IOException e) {
-                ConsoleHelper.writeMessage("Не могу отправить сообщение клиенту с именем: " + clientName);
+        public static void sendBroadcastMessage(Message message) {
+            for (String clientName : connectionMap.keySet()) {
+                try {
+                    connectionMap.get(clientName).send(message);
+                } catch (IOException e) {
+                    ConsoleHelper.writeMessage("Не могу отправить сообщение клиенту с именем: " + clientName);
+                }
             }
         }
-    }
 
+    }
 }
