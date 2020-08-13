@@ -50,21 +50,34 @@ public class Server {
             }
         }
 
-        public static void sendBroadcastMessage(Message message) {
-            for (String clientName : connectionMap.keySet()) {
-                try {
-                    connectionMap.get(clientName).send(message);
-                } catch (IOException e) {
-                    ConsoleHelper.writeMessage("Не могу отправить сообщение клиенту с именем: " + clientName);
-                }
-            }
-        }
-
-        private void notifyUsers(Connection connection, String userName) throws IOException{
+        private void notifyUsers(Connection connection, String userName) throws IOException
+        {
             for (String clientName : connectionMap.keySet()) {
                 if (!clientName.equals(userName))
                     connection.send(new Message(MessageType.USER_ADDED, clientName));
             }
             }
+        private void serverMainLoop(Connection connection, String userName)
+                throws IOException, ClassNotFoundException{
+        while (!Thread.currentThread().isInterrupted()){
+            Message message = connection.receive();
+            if(message != null && message.getType() == MessageType.TEXT){
+                String textmessage  = userName + ": " + message.getData();
+                sendBroadcastMessage(new Message(MessageType.TEXT, textmessage));
+            }
+            else {
+                ConsoleHelper.writeMessage("Ошибка.");
+            }
         }
+        }
+        }
+    public static void sendBroadcastMessage(Message message) {
+        for (String clientName : connectionMap.keySet()) {
+            try {
+                connectionMap.get(clientName).send(message);
+            } catch (IOException e) {
+                ConsoleHelper.writeMessage("Не могу отправить сообщение клиенту с именем: " + clientName);
+            }
+        }
+    }
 }
