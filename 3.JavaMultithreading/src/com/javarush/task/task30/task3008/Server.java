@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Server {
 
     static private Map<String, Connection> connectionMap = new ConcurrentHashMap<>();
-    ;
 
     private static class Handler extends Thread {
         private Socket socket;
@@ -61,5 +60,11 @@ public class Server {
             }
         }
 
-    }
+        private void notifyUsers(Connection connection, String userName) throws IOException{
+            for (String clientName : connectionMap.keySet()) {
+                if (!clientName.equals(userName))
+                    connection.send(new Message(MessageType.USER_ADDED, clientName));
+            }
+            }
+        }
 }
