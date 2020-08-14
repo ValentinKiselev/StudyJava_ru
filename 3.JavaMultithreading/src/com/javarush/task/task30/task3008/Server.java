@@ -70,7 +70,30 @@ public class Server {
             }
         }
         }
+
+        @Override
+        public void run() {
+            ConsoleHelper.writeMessage("Новое соединение с удалённым адресом: " + socket.getRemoteSocketAddress());
+            Connection connection = null;
+            String clientName = null;
+            try{
+                connection = new Connection(socket);
+                clientName = serverHandshake(connection);
+                sendBroadcastMessage(new Message(MessageType.USER_ADDED, clientName));
+                notifyUsers(connection, clientName);
+                serverMainLoop(connection, clientName);
+            } catch (IOException e) {
+                ConsoleHelper.writeMessage("Произошла ошибка при попытке установить соединение с клиентом с адресом: ");
+            } catch (ClassNotFoundException e) {
+                ConsoleHelper.writeMessage("Произошла ошибка при попытке установить соединение с клиентом с адресом: ");
+            }
+            if(clientName!=null){
+                connectionMap.remove(clientName);
+                sendBroadcastMessage(new Message(MessageType.USER_REMOVED, clientName));
+            }
         }
+    }
+
     public static void sendBroadcastMessage(Message message) {
         for (String clientName : connectionMap.keySet()) {
             try {
