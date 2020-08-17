@@ -6,6 +6,7 @@ import com.javarush.task.task30.task3008.Message;
 import com.javarush.task.task30.task3008.MessageType;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class Client {
     protected Connection connection;
@@ -92,6 +93,21 @@ public class Client {
             }
         }
 
+        @Override
+        public void run() {
+            String serverAdress = getServerAddress();
+            int serverPort = getServerPort();
+            try {
+                Socket socket = new Socket(serverAdress, serverPort);
+                Client.this.connection = new Connection(socket);
+                clientHandshake();
+                clientMainLoop();
+            } catch (IOException e) {
+                notifyConnectionStatusChanged(false);
+            } catch (ClassNotFoundException e) {
+                notifyConnectionStatusChanged(false);
+            }
+        }
     }
     protected String getServerAddress(){
         ConsoleHelper.writeMessage("Введите адрес сервера: ");
