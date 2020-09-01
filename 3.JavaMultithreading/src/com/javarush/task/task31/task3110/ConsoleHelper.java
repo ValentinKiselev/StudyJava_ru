@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 public class ConsoleHelper {
     private static BufferedReader bis = new BufferedReader(new InputStreamReader(System.in));
+
     public static void writeMessage(String message) {
         System.out.println(message);
     }
@@ -17,6 +18,6 @@ public class ConsoleHelper {
 
     public static int readInt() throws IOException {
         String text = readString();
-        return Integer.parseInt(text);
+        return Integer.parseInt(text.trim());
     }
 }
