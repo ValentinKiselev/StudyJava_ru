@@ -37,9 +37,33 @@ public class View extends JFrame implements ActionListener {
     public void exit(){
         controller.exit();
     }
-    public void initMenuBar(){
 
+    public View() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
+        public void initMenuBar(){
+        JMenuBar jMenuBar = new JMenuBar();
+        MenuHelper.initFileMenu(this, jMenuBar);
+        MenuHelper.initEditMenu(this, jMenuBar);
+        MenuHelper.initStyleMenu(this, jMenuBar);
+        MenuHelper.initAlignMenu(this, jMenuBar);
+        MenuHelper.initColorMenu(this, jMenuBar);
+        MenuHelper.initFontMenu(this, jMenuBar);
+        MenuHelper.initHelpMenu(this, jMenuBar);
+        getContentPane().add(jMenuBar, BorderLayout.NORTH);
+    }
+
     public void initEditor(){
         htmlTextPane.setContentType("text/html");
         tabbedPane.addTab("HTML", new JScrollPane(htmlTextPane));
