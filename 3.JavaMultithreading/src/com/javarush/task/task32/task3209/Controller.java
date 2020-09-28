@@ -59,4 +59,19 @@ public class Controller {
         }
         return stringWriter.toString();
     }
+
+    public void createNewDocument() {
+    }
+
+    public void saveDocument() {
+    }
+
+    public void saveDocumentAs() {
+    }
+
+    public void showAbout() {
+    }
+
+    public void openDocument() {
+    }
 }
