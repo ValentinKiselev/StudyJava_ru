@@ -1,5 +1,7 @@
 package com.javarush.task.task27.task2712.kitchen;
 
+import com.javarush.task.task27.task2712.ConsoleHelper;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,9 +14,9 @@ public class Cook extends Observable implements Observer {
     }
     @Override
     public void update(Observable o, Object arg) {
+        ConsoleHelper.writeMessage("Start cooking - " + arg);
         setChanged();
         notifyObservers(arg);
-        System.out.println("Start cooking - " + arg.toString());
     }
 
     @Override

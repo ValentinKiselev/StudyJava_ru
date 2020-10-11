@@ -17,16 +17,26 @@ public class Tablet extends Observable {
 
     public Order createOrder() throws IOException {
         Order order = null;
-        try {
-        order = new Order(this);
-            setChanged();
-            notifyObservers(order);
+        try
+        {
+            order = new Order(this);
+            if (order.isEmpty()) return null;
+            else {
+                ConsoleHelper.writeMessage(order.toString());
+                setChanged();
+                notifyObservers(order);
             }
-        catch (IOException e) {
+
+
+        } catch (IOException e) {
             logger.log(Level.SEVERE, "Console is unavailable.");
+            return null;
+
         }
+
         return order;
     }
+
     @Override
     public String toString() {
         return "Tablet{number=" + number + "}";
