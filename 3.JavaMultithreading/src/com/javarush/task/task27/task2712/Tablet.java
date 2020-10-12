@@ -1,5 +1,6 @@
 package com.javarush.task.task27.task2712;
 
+import com.javarush.task.task27.task2712.ad.AdvertisementManager;
 import com.javarush.task.task27.task2712.kitchen.Order;
 
 import java.io.IOException;
@@ -20,6 +21,8 @@ public class Tablet extends Observable {
         try
         {
             order = new Order(this);
+            AdvertisementManager advertisementManager = new AdvertisementManager(100);
+            advertisementManager.processVideos();
             if (order.isEmpty()) return null;
             else {
                 ConsoleHelper.writeMessage(order.toString());
