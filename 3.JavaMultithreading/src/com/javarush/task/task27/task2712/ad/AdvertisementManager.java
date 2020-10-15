@@ -1,6 +1,9 @@
 package com.javarush.task.task27.task2712.ad;
 
 import com.javarush.task.task27.task2712.ConsoleHelper;
+import com.javarush.task.task27.task2712.statistic.StatisticManager;
+import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
+import com.javarush.task.task27.task2712.statistic.event.VideoSelectedEventDataRow;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,51 +11,87 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AdvertisementManager {
-    private final AdvertisementStorage storage =  AdvertisementStorage.getInstance();
+    private final AdvertisementStorage storage = AdvertisementStorage.getInstance();
+    //  время выполнения заказа
     private int timeSeconds;
 
     public AdvertisementManager(int timeSeconds) {
         this.timeSeconds = timeSeconds;
     }
+
     public void processVideos() throws NoVideoAvailableException {
-        if (storage.list().isEmpty()) throw new NoVideoAvailableException();
-        List<Advertisement> newList = new ArrayList<>();
-        for (Advertisement advertisement : storage.list()) {
-            if (advertisement.getHits() > 0)
-                newList.add(advertisement);
+        List<Advertisement> listOfAdvertisement = storage.list();
+        if (listOfAdvertisement.isEmpty()) throw new NoVideoAvailableException();
+
+        ArrayList<Advertisement> playList = new ArrayList<>();
+        ArrayList<Advertisement> tempPlaylist = new ArrayList<>();
+        int maxAmount = 0;
+        int maxDuration = 0;
+        int minCounter = 0;
+        for (int nabor = 0; nabor < Math.pow(2, listOfAdvertisement.size()); nabor++) {
+            int tempAmount = 0;
+            int tempDuration = 0;
+            int tempCounter = 0;
+            tempPlaylist.clear();
+            for (int i = 0; i < listOfAdvertisement.size(); i++) {
+                int mask = 1 << i;
+                if ((nabor & mask) > 0) {
+                    if (listOfAdvertisement.get(i).canBeViewed())
+                        tempPlaylist.add(listOfAdvertisement.get(i));
+                }
+            }
+
+            for (Advertisement a : tempPlaylist) {
+                tempAmount += a.getAmountPerOneDisplaying();
+                tempDuration += a.getDuration();
+            }
+            tempCounter = tempPlaylist.size();
+
+            if (tempDuration <= timeSeconds) {
+                minCounter = playList.size();
+                if (tempAmount > maxAmount) {
+                    playList.clear();
+                    playList.addAll(tempPlaylist);
+                    maxAmount = tempAmount;
+                    maxDuration = tempDuration;
+                    minCounter = tempCounter;
+                } else if (tempAmount == maxAmount) {
+                    if (tempDuration > maxDuration) {
+                        playList.clear();
+                        playList.addAll(tempPlaylist);
+                        maxAmount = tempAmount;
+                        maxDuration = tempDuration;
+                        minCounter = tempCounter;
+                    } else if (tempDuration == maxDuration) {
+                        if (tempCounter < minCounter) {
+                            playList.clear();
+                            playList.addAll(tempPlaylist);
+                            maxAmount = tempAmount;
+                            maxDuration = tempDuration;
+                            minCounter = tempCounter;
+                        }
+                    }
+                }
+            }
         }
-        Collections.sort(newList, new Comparator<Advertisement>() {
+        Collections.sort(playList, new Comparator<Advertisement>() {
             @Override
             public int compare(Advertisement o1, Advertisement o2) {
-                int result = Long.compare(o1.getAmountPerOneDisplaying(), o2.getAmountPerOneDisplaying());
-                if (result != 0)
-                    return -result;
-
-                long oneSecondCost1 = o1.getAmountPerOneDisplaying() * 1000 / o1.getDuration();
-                long oneSecondCost2 = o2.getAmountPerOneDisplaying() * 1000 / o2.getDuration();
-
-                return Long.compare(oneSecondCost1, oneSecondCost2);
+                if (o2.getAmountPerOneDisplaying() - o1.getAmountPerOneDisplaying() == 0) {
+                    return (int) (((double) o1.getAmountPerOneDisplaying() / (double) o1.getDuration()) * 1000) - (int) (((double) o2.getAmountPerOneDisplaying() / (double) o2.getDuration()) * 1000);
+                }
+                return Math.toIntExact(o2.getAmountPerOneDisplaying() - o1.getAmountPerOneDisplaying());
             }
         });
-        storage.list().clear();
-        storage.list().addAll(newList);
-
-        int timeLeft = timeSeconds;
-        for (Advertisement advertisement : storage.list()) {
-            if (timeLeft < advertisement.getDuration() || advertisement.getHits() < 0) {
-                continue;
-            }
-
-            ConsoleHelper.writeMessage(advertisement.getName() + " is displaying... "
-                    + advertisement.getAmountPerOneDisplaying() + ", "
-                    + advertisement.getAmountPerOneDisplaying() * 1000 / advertisement.getDuration());
-
-            timeLeft -= advertisement.getDuration();
-            advertisement.revalidate();
-        }
-
-        if (timeLeft == timeSeconds) {
+        if (storage.list().isEmpty()) {
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(maxDuration));
             throw new NoVideoAvailableException();
+        } else {
+            StatisticManager.getInstance().register(new VideoSelectedEventDataRow(playList, maxAmount, maxDuration));
+            for (Advertisement a : playList) {
+                a.revalidate();
+                ConsoleHelper.writeMessage(a.getName() + " is displaying... " + a.getAmountPerOneDisplaying() + ", " + (int) (((double) a.getAmountPerOneDisplaying() / (double) a.getDuration()) * 1000));
+            }
         }
     }
 }

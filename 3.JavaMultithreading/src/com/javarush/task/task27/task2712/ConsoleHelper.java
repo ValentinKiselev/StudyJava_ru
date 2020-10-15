@@ -18,8 +18,9 @@ public class ConsoleHelper {
     }
     public static List<Dish> getAllDishesForOrder() throws IOException {
         List<Dish> dishes = new ArrayList<>();
-        ConsoleHelper.writeMessage("Выберите блюда. Для завершения введите 'exit'.");
         ConsoleHelper.writeMessage(Dish.allDishesToString());
+        ConsoleHelper.writeMessage("Введите название блюда или 'exit'.");
+
         while (true) {
             String dishToOrder = readString();
             if (dishToOrder.equalsIgnoreCase("exit")) {

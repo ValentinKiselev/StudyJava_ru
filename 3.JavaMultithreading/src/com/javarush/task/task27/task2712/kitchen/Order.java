@@ -35,4 +35,10 @@ public class Order {
         }
         return sumtime;
     }
+    public List<Dish> getDishes() {
+        return dishes;
+    }
+    public Tablet getTablet() {
+        return tablet;
+    }
 }
