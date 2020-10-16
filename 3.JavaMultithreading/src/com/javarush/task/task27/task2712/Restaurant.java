@@ -20,6 +20,11 @@ public class Restaurant {
         tablet.createOrder();
         ConsoleHelper.writeMessage("заказ 4 клиента");
         tablet.createOrder();
+        DirectorTablet directorTablet = new DirectorTablet();
+        directorTablet.printActiveVideoSet();
+        directorTablet.printAdvertisementProfit();
+        directorTablet.printArchivedVideoSet();
+        directorTablet.printCookWorkloading();
     }
 
 }
