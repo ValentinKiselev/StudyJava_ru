@@ -7,7 +7,7 @@ package com.javarush.task.task30.task3012;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.createExpression(74);
+        solution.createExpression(29);
     }
 
     public void createExpression(int number) {
