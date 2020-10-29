@@ -71,4 +71,13 @@ public class Model {
         }
         return change;
     }
+    public void left() {
+        boolean isChanged = false;
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            if (compressTiles(gameTiles[i]) | mergeTiles(gameTiles[i])) {
+                isChanged = true;
+            }
+        }
+        if (isChanged) addTile();
+    }
 }
