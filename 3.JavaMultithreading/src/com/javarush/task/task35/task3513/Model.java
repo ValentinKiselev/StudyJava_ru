@@ -6,9 +6,13 @@ import java.util.List;
 public class Model {
     private static final int FIELD_WIDTH = 4;
     private Tile[][] gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+    int score;
+    int maxTile;
 
     public Model() {
         resetGameTiles();
+        score = 0;
+        maxTile = 0;
     }
     private List<Tile> getEmptyTiles() {
         List<Tile> emptyTileList = new ArrayList<>();
@@ -37,5 +41,34 @@ public class Model {
         }
         addTile();
         addTile();
+    }
+
+    private boolean compressTiles(Tile[] tiles) {
+        boolean change = false;
+        for (int k = 0; k < tiles.length - 1; k++) {
+            for (int i = 0; i < tiles.length - 1; i++) {
+                if (tiles[i].isEmpty() && !tiles[i+1].isEmpty()) {
+                    change = true;
+                    tiles[i] = tiles[i+1];
+                    tiles[i+1] = new Tile();
+                }
+            }
+        }
+        return change;
+    }
+
+    private boolean mergeTiles(Tile[] tiles) {
+        boolean change = false;
+        for (int i = 0; i < tiles.length - 1; i++) {
+            if (tiles[i].value == tiles[i+1].value && !tiles[i].isEmpty() && !tiles[i+1].isEmpty()) {
+                change = true;
+                tiles[i].value *= 2;
+                tiles[i+1] = new Tile();
+                maxTile = maxTile > tiles[i].value ? maxTile : tiles[i].value;
+                score += tiles[i].value;
+                compressTiles(tiles);
+            }
+        }
+        return change;
     }
 }
