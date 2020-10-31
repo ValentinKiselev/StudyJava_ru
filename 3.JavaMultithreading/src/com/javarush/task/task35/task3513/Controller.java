@@ -51,4 +51,8 @@ public class Controller extends KeyAdapter {
         if(model.maxTile == WINNING_TILE){view.isGameWon = true;}
         view.repaint();
     }
+
+    public View getView() {
+        return view;
+    }
 }
