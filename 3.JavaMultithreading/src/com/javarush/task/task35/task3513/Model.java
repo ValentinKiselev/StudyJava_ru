@@ -90,6 +90,7 @@ public class Model {
         return change;
     }
     public void left() {
+        if (isSaveNeeded) { saveState(gameTiles); }
         boolean isChanged = false;
         for (int i = 0; i < FIELD_WIDTH; i++) {
             if (compressTiles(gameTiles[i]) | mergeTiles(gameTiles[i])) {
