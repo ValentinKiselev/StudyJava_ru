@@ -9,9 +9,9 @@ public class Model {
     private Tile[][] gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
     int score;
     int maxTile;
-    Stack<Tile[][]> previousStates = new Stack<>();
-    Stack<Integer> previousScores = new Stack<>();
-    private boolean isSaveNeed = true;
+    private Stack previousStates = new Stack();
+    private Stack previousScores = new Stack();
+    private boolean isSaveNeeded = true;
 
     public Tile[][] getGameTiles() {
         return gameTiles;
@@ -22,6 +22,16 @@ public class Model {
         score = 0;
         maxTile = 0;
     }
+
+    public void rollback() {
+        if (!previousStates.isEmpty()) {
+            gameTiles = (Tile[][]) previousStates.pop();
+        }
+        if (!previousScores.isEmpty()) {
+            score = (int)previousScores.pop();
+        }
+    }
+
     private List<Tile> getEmptyTiles() {
         List<Tile> emptyTileList = new ArrayList<>();
         for (int i = 0; i < FIELD_WIDTH; i++) {
@@ -88,18 +98,18 @@ public class Model {
         }
         if (isChanged) addTile();
     }
-    private void saveState(Tile[][] tiles) {
-        Tile[][] fieldToSave = new Tile[tiles.length][tiles[0].length];
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[0].length; j++) {
-                fieldToSave[i][j] = new Tile(tiles[i][j].value);
+    private void saveState(Tile[][] tiles){
+        Tile[][] tempTile = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+        for (int i = 0; i < FIELD_WIDTH; i++){
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                tempTile[i][j] = new Tile(tiles[i][j].value);
             }
         }
-        previousStates.push(fieldToSave);
-        int scoreToSave = score;
-        previousScores.push(scoreToSave);
-        isSaveNeed = false;
+        previousStates.push(tempTile);
+        previousScores.push(score);
+        isSaveNeeded = false;
     }
+
     public void rotate() {
         for (int k = 0; k < 2; k++) {
             for (int j = k; j < 3 - k; j++) {
