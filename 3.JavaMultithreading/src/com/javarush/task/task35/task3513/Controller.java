@@ -31,6 +31,7 @@ public class Controller extends KeyAdapter {
 
     public void keyPressed(KeyEvent keyEvent) {
         if(keyEvent.getKeyCode() == KeyEvent.VK_Z) model.rollback();
+        if(keyEvent.getKeyCode() == KeyEvent.VK_R) model.randomMove();
         if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) resetGame();
         if (!model.canMove()) view.isGameLost = true;
         if (view.isGameLost == false && view.isGameWon == false) {

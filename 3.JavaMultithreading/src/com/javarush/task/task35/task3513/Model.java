@@ -166,5 +166,23 @@ public class Model {
         }
         return false;
     }
+    public void randomMove(){
+        int n = 0;
+        n = ((int) (Math.random() * 100)) % 4;
+        switch (n){
+            case 0:
+                left();
+                break;
+            case 1:
+                down();
+                break;
+            case 2:
+                up();
+                break;
+            case 3:
+                right();
+                break;
+        }
+    }
 
 }
